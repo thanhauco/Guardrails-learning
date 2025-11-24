@@ -57,7 +57,12 @@ This repository is structured as a learning path, taking you from Level 1 (Basic
     - `performance_test.py`: Latency measurement script.
 
 - **`notebooks/`**: Interactive learning.
-    - `guardrails_tutorial.ipynb`: Step-by-step tutorial.
+    - `guardrails_tutorial.ipynb`: General overview.
+    - `00_data_generation.ipynb`: Generate synthetic datasets (Clean, Toxic, PII).
+    - `01_privacy_guardrails.ipynb`: Deep dive into PII detection.
+    - `02_content_safety.ipynb`: Evaluating toxicity detection.
+    - `03_rag_validation.ipynb`: Validating RAG outputs.
+    - `04_prompt_engineering.ipynb`: Prompt optimization lab.
 
 ## 🛠️ Getting Started
 
