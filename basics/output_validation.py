@@ -74,7 +74,10 @@ class OutputValidator:
             sanitized = re.sub(pat, "***", sanitized, flags=re.IGNORECASE)
         if len(sanitized) > self.max_length:
             sanitized = sanitized[:self.max_length]
-        return OutputResponse(OutputStatus.SANITIZED, "Sanitized", sanitized_output=sanitized)
+            
+        if sanitized != text:
+            return OutputResponse(OutputStatus.SANITIZED, "Sanitized", sanitized_output=sanitized)
+        return OutputResponse(OutputStatus.VALID, "No sanitization needed", sanitized_output=text)
 
     def validate(self, text: str, sanitize: bool = True) -> OutputResponse:
         # Length first

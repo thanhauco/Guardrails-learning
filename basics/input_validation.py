@@ -175,14 +175,14 @@ class InputValidator:
         """
         sanitized = text
         
-        # Remove HTML tags
-        sanitized = re.sub(r'<[^>]+>', '', sanitized)
-        
-        # Remove script content
+        # Remove script content first (before tags are stripped)
         sanitized = re.sub(r'<script.*?</script>', '', sanitized, flags=re.DOTALL | re.IGNORECASE)
         
         # Remove event handlers
         sanitized = re.sub(r'on\w+\s*=\s*["\'].*?["\']', '', sanitized, flags=re.IGNORECASE)
+        
+        # Remove remaining HTML tags
+        sanitized = re.sub(r'<[^>]+>', '', sanitized)
         
         # Normalize whitespace
         sanitized = ' '.join(sanitized.split())
@@ -216,37 +216,30 @@ class InputValidator:
         """
         # Check if input is None or empty
         if text is None:
-            return ValidationResponse(
-                status=ValidationResult.INVALID,
-                message="Input cannot be None",
-                errors=["None input"]
-            )
-        
-        # Sanitize first if requested
+            return ValidationResponse(ValidationResult.INVALID, "Input cannot be None", errors=["None input"])
+            
+        is_sanitized = False
         if sanitize:
-            sanitize_result = self.sanitize_input(text)
-            text = sanitize_result.sanitized_input
-        
-        # Validate length
-        length_result = self.validate_length(text)
-        if length_result.status == ValidationResult.INVALID:
-            return length_result
-        
-        # Validate format
-        format_result = self.validate_format(text)
-        if format_result.status == ValidationResult.INVALID:
-            return format_result
-        
-        # Check forbidden patterns
-        pattern_result = self.check_forbidden_patterns(text)
-        if pattern_result.status == ValidationResult.INVALID:
-            return pattern_result
-        
-        return ValidationResponse(
-            status=ValidationResult.VALID,
-            message="All validations passed",
-            sanitized_input=text
-        )
+            san_res = self.sanitize_input(text)
+            if san_res.status == ValidationResult.SANITIZED:
+                is_sanitized = True
+            text = san_res.sanitized_input or text
+            
+        length_res = self.validate_length(text)
+        if length_res.status == ValidationResult.INVALID:
+            return length_res
+            
+        format_res = self.validate_format(text)
+        if format_res.status == ValidationResult.INVALID:
+            return format_res
+            
+        forbidden_res = self.check_forbidden_patterns(text)
+        if forbidden_res.status == ValidationResult.INVALID:
+            return forbidden_res
+            
+        status = ValidationResult.SANITIZED if is_sanitized else ValidationResult.VALID
+        msg = "Input sanitized" if is_sanitized else "All checks passed"
+        return ValidationResponse(status, msg, sanitized_input=text)
 
 
 class EmailValidator(InputValidator):

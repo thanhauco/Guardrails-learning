@@ -11,10 +11,10 @@ import os
 # Add project root to path to import local modules
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from _01_basics.input_validation import InputValidator
-from _01_basics.output_validation import OutputValidator
-from _02_intermediate.toxic_content_detection import ToxicDetector
-from _02_intermediate.pii_detection import PIIDetector
+from basics.input_validation import InputValidator
+from basics.output_validation import OutputValidator
+from intermediate.toxic_content_detection import ToxicDetector
+from intermediate.pii_detection import PIIDetector
 
 class SafeChatbot:
     def __init__(self):
