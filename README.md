@@ -63,6 +63,9 @@ This repository is structured as a learning path, taking you from Level 1 (Basic
     - `02_content_safety.ipynb`: Evaluating toxicity detection.
     - `03_rag_validation.ipynb`: Validating RAG outputs.
     - `04_prompt_engineering.ipynb`: Prompt optimization lab.
+    - `05_adversarial_attacks.ipynb`: Jailbreaking and defense.
+    - `06_multilingual_safety.ipynb`: Handling non-English inputs.
+    - `07_latency_optimization.ipynb`: Parallel execution and caching.
 
 ## 🛠️ Getting Started
 
